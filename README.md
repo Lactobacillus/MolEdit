@@ -51,6 +51,16 @@ Running these notebooks requires:
 * Xponge==1.5.0a6, installed via `pip install git+https://gitee.com/gao_hyp_xyj_admin/xponge.git`
 * nglview==3.1.2 (for visualization in notebooks)
 
+```shell
+conda create -n moledit python=3.10 -y
+conda activate moledit
+conda install -n moledit -c conda-forge cudnn=8.9.7.29 -y
+pip install git+https://gitee.com/gao_hyp_xyj_admin/xponge.git
+pip install  flax==0.8.3 rdkit==2023.9.6 ml_collections nglview==3.1.2 tqdm
+pip install jaxlib==0.4.20+cuda12.cudnn89 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+pip install jax==0.4.20 e3nn_jax==0.20.6 numpy==1.26.4 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+```
+
 In theory, any environment compatible with the packages mentioned above should run successfully. Our configuration includes Ubuntu 22.04 (GNU/Linux x86_64), NVIDIA A100-SXM4-80GB, CUDA 11.8 and Anaconda 23.7.2. The complete notebook execution takes approximately 0.5 hours.
 
 Details on calculating quantitative metrics, including validity, uniqueness, molecular physical stability, and conformational diversity, can be found in [evaluation](./evaluation). Additionally, we provide useful scripts to evaluate energy/force under [the General AMBER force field](https://ambermd.org/antechamber/gaff.html) (without periodic boundary conditions). We also provide scripts used in quantitative benchmark study (linker design & binder design).
@@ -109,6 +119,11 @@ You may alternatively implement your own data pipeline if this format doesn't su
 ## Data Availability
 
 The dataset used in the development of MolEdit can be found in [here](https://zenodo.org/records/15480816).
+
+## How to run wrapper?
+```shell
+CUDA_VISIBLE_DEVICES=0 python moledit_wrapper.py --input-mol <input.mol> --mask-mol <mask.mol> --out-dir <output_dir> --num-sample 16 --edit-mode both --allowed-elements C,N,O,F,Cl,Br,I --element-change-prob 0.5 --add-atoms 2 --add-radius-scale 0.6 --method DPM_3 --steps 20 --output-format xyz
+```
 
 ## Citation
 ```python
